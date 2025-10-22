@@ -1,17 +1,20 @@
 from django import forms
-from .models import Pet
+# 1. Importe também o modelo PetPhoto
+from .models import Pet, PetPhoto
 
 class PetForm(forms.ModelForm):
     class Meta:
-
-        #Diz ao django que este formulário é para o modelo Pet
         model = Pet
-        #Lista os campos do modelo que devem aparecer no formulário
         fields = ['name', 'breed', 'bio', 'birth_date']
-
-        #customizando widgets para melhorar a aparência do formulário
         widgets = {
-
-            'birth_date': forms.DateInput(attrs= {'type': 'date',}),
-
+            'birth_date': forms.DateInput(
+                attrs={'type': 'date'},
+            ),
         }
+
+# 2. ADICIONE ESTE NOVO FORMULÁRIO
+class PetPhotoForm(forms.ModelForm):
+    class Meta:
+        model = PetPhoto
+        # O único campo que o usuário precisa preencher é o da imagem
+        fields = ['image']
