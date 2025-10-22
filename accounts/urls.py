@@ -2,6 +2,7 @@ from django.urls import path
 # Vamos importar as views de autenticação diretamente
 from django.contrib.auth import views as auth_views
 from .views import SignUpView
+from .views import SignUpView, HomeView, PetCreateView
 
 from .views import SignUpView, HomeView
 
@@ -14,5 +15,8 @@ urlpatterns = [
 
     # E a nossa view de cadastro continua aqui
     path('signup/', SignUpView.as_view(), name='signup'),
+
     path('', HomeView.as_view(), name='home'),
+
+    path('pet/add/', PetCreateView.as_view(), name='pet_add'),
 ]

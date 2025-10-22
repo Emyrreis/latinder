@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <h2 class="mt-4 mb-3">Cadastre seu Pet</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary mt-3">Salvar Pet</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
