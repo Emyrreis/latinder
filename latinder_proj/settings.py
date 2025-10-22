@@ -114,3 +114,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Configurações do Crispy Forms
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+
+# Para onde ir após o login
+LOGIN_REDIRECT_URL = 'home'
+
+# Para onde ir após o logout
+LOGOUT_REDIRECT_URL = 'login'

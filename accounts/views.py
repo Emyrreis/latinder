@@ -1,5 +1,7 @@
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic.edit import CreateView
+from django.contrib.auth.forms import UserCreationForm
+from django.views.generic.base import TemplateView
 from django.contrib.auth.forms import UserCreationForm
 
 # Tarefa 1.3: Criar a view de cadastro de usuário
@@ -15,3 +17,6 @@ class SignUpView(CreateView):
 
         # O nome do arquivo HTML que será usado para renderizar esta página.
         template_name = 'registration/signup.html'
+
+class HomeView(TemplateView):
+    template_name = 'home.html'
