@@ -12,27 +12,35 @@
             <a class="navbar-brand" href="{% url 'home' %}">Latinder</a>
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto">
-                            {% if user.is_authenticated %}
-                                <li class="nav-item">
-                                    <span class="navbar-text me-3">Olá, {{ user.username }}!</span>
-                                </li>
+                        {% if user.is_authenticated %}
+                            
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Chat</a>
+                            </li>
 
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'owner_detail' pk=user.owner.pk %}">Meu Perfil</a>
-                                </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'owner_detail' pk=user.owner.pk %}">Meu Perfil</a>
+                            </li>
 
-                                {% if user.owner.pet_set.all %}
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'pet_detail' pk=user.owner.pet_set.first.pk %}">Meu Pet</a>
-                                </li>
-                                {% endif %}
+                            {% if user.owner.pet_set.all %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'pet_detail' pk=user.owner.pet_set.first.pk %}">Meu Pet</a>
+                            </li>
+                            {% endif %}
 
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-                                </li>
-                            {% else %}
-                                {% endif %}
-                  </ul>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                            </li>
+
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'login' %}">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'signup' %}">Cadastro</a>
+                            </li>
+                        {% endif %}
+                 </ul>
             </div>
         </div>
     </nav>

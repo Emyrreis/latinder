@@ -1,15 +1,28 @@
+# Em accounts/models.py
 from django.db import models
 from django.contrib.auth.models import User
-from datetime import date # 1. Adicione esta importação
+from datetime import date
 
-# ... modelo Owner ...
 class Owner(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(blank=True, null=True)
+    # Novos campos (blank=True e null=True para permitir que sejam vazios)
+    birth_date = models.DateField(blank=True, null=True)
+    state = models.CharField(max_length=100, blank=True, null=True)
+    city = models.CharField(max_length=100, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def age(self):
+        if self.birth_date:
+            today = date.today()
+            age = today.year - self.birth_date.year - ((today.month, today.day) < (self.birth_date.month, self.birth_date.day))
+            return age
+        return None # Retorna None se não houver data de nascimento
 
     def __str__(self):
         return self.user.username
+
 
 class Pet(models.Model):
     owner = models.ForeignKey(Owner, on_delete=models.CASCADE)

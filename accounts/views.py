@@ -1,13 +1,13 @@
 from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.base import TemplateView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView
 from django.http import HttpResponseRedirect
 
-# Importações dos nossos Forms e Models
-from .forms import PetForm, PetPhotoForm
+# A correção está aqui: adicionamos OwnerEditForm
+from .forms import PetForm, PetPhotoForm, OwnerEditForm
 from .models import Pet, Owner, PetPhoto
 
 # --- Nossas Views ---
@@ -22,7 +22,7 @@ class SignUpView(CreateView):
         Owner.objects.create(user=self.object)
         return response
 
-class HomeView(TemplateView):
+class HomeView(LoginRequiredMixin, TemplateView):
     template_name = 'home.html'
 
 class PetCreateView(LoginRequiredMixin, CreateView):
@@ -59,7 +59,17 @@ class PetDetailView(DetailView):
             context['photo_form'] = form
             return self.render_to_response(context)
 
-# View que estava faltando
 class OwnerDetailView(LoginRequiredMixin, DetailView):
     model = Owner
     template_name = 'owner_detail.html'
+
+class OwnerUpdateView(LoginRequiredMixin, UpdateView):
+    model = Owner
+    form_class = OwnerEditForm
+    template_name = 'owner_form.html'
+    
+    def get_success_url(self):
+        return reverse_lazy('owner_detail', kwargs={'pk': self.object.pk})
+
+    def get_object(self, queryset=None):
+        return self.request.user.owner
