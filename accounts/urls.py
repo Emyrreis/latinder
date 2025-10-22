@@ -1,22 +1,24 @@
 from django.urls import path
-# Vamos importar as views de autenticação diretamente
 from django.contrib.auth import views as auth_views
-from .views import SignUpView
-from .views import SignUpView, HomeView, PetCreateView
-
-from .views import SignUpView, HomeView
+# 1. Adicione PetDetailView à importação
+from .views import SignUpView, HomeView, PetCreateView, PetDetailView, OwnerDetailView
 
 urlpatterns = [
-    # Aqui definimos a rota e damos o apelido (name) 'login' explicitamente
+    # Rotas de Autenticação
     path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
-
-    # Fazemos o mesmo para o logout
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-
-    # E a nossa view de cadastro continua aqui
+    path('logout/', auth_views.LogoutView.as_view(template_name='registration/logout.html'), name='logout'),
     path('signup/', SignUpView.as_view(), name='signup'),
+    
 
+    # Rotas do App
     path('', HomeView.as_view(), name='home'),
-
     path('pet/add/', PetCreateView.as_view(), name='pet_add'),
+
+    # 2. Adicione esta nova rota dinâmica
+    # O <int:pk> é um conversor que captura um número inteiro da URL
+    # e o passa para a view como uma variável chamada 'pk' (Primary Key).
+    path('pet/<int:pk>/', PetDetailView.as_view(), name='pet_detail'),
+
+    # --- NOVA ROTA ADICIONADA --- Ver detalhes do Owner
+    path('profile/<int:pk>/', OwnerDetailView.as_view(), name='owner_detail'),
 ]

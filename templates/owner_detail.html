@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Perfil de {{ owner.user.username }}</h2>
+    
+    {% if owner.bio %}
+        <p class="lead">{{ owner.bio }}</p>
+    {% else %}
+        <p class="text-muted">Nenhuma biografia adicionada ainda.</p>
+    {% endif %}
+
+    <hr>
+
+    <h4>Meus Pets</h4>
+    {% for pet in owner.pet_set.all %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{{ pet.name }}</h5>
+                <p class="card-text">{{ pet.breed }} | {{ pet.age }} anos</p>
+                <a href="{% url 'pet_detail' pk=pet.pk %}" class="btn btn-primary">Ver Perfil do Pet</a>
+            </div>
+        </div>
+    {% empty %}
+        <p>Você ainda não cadastrou nenhum pet.</p>
+    {% endfor %}
+
+</div>
+{% endblock %}

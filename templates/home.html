@@ -4,8 +4,21 @@
     <div class="text-center">
         <h1 class="mt-5">Bem-vindo ao Latinder!</h1>
 
-        <p class="lead mt-4">Tudo pronto para encontrar um parceiro para o seu pet?</p>
-        <a href="{% url 'pet_add' %}" class="btn btn-success btn-lg">Adicionar Meu Pet</a>
+        {% comment %}
+            Verificamos se o set de pets do dono do usuário não está vazio.
+            'user' é o usuário logado.
+            'user.owner' é o perfil de dono ligado a ele.
+            'user.owner.pet_set.all' é a lista de todos os pets ligados a esse dono.
+        {% endcomment %}
+
+        {% if user.owner.pet_set.all %}
+            <p class="lead mt-4">
+                Tudo pronto para encontrar um parceiro para o seu pet, <strong>{{ user.owner.pet_set.first.name }}</strong>!
+            </p>
+            {% else %}
+            <p class="lead mt-4">Parece que você ainda não cadastrou seu pet. Vamos começar?</p>
+            <a href="{% url 'pet_add' %}" class="btn btn-success btn-lg">Adicionar Meu Pet</a>
+        {% endif %}
 
     </div>
 {% endblock %}
