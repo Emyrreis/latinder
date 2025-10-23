@@ -1,17 +1,25 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
+{% comment %}
+Este bloco adiciona a classe 'login-page' ao <body> desta página específica.
+No nosso CSS, a classe .login-page remove o blur do fundo.
+{% endcomment %}
+{% block body_class %}login-page{% endblock %}
+
 {% block content %}
-<div class="row justify-content-center">
+<div class="row justify-content-center align-items-center" style="min-height: 80vh;">
     <div class="col-md-6 col-lg-4">
-        <h2 class="mt-5 mb-3">Login</h2>
-        <form method="post">
-            {% csrf_token %}
-            {{ form|crispy }}
-            <div class="d-grid">
-                <button type="submit" class="btn btn-primary mt-3">Entrar</button>
-            </div>
-        </form>
-    </div>
+
+        <div class="glass-card">
+            <h2 class="text-center mb-4">Login</h2>
+            <form method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary mt-3">Entrar</button>
+                </div>
+            </form>
+        </div></div>
 </div>
 {% endblock %}

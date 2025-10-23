@@ -1,43 +1,58 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 
 {% block content %}
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <div>
-            {% if owner.profile_picture %}
-                <img src="{{ owner.profile_picture.url }}" alt="Foto de {{ owner.user.get_full_name }}" class="rounded-circle me-3" style="width: 80px; height: 80px; object-fit: cover;">
-            {% endif %}
-            <h2>{{ owner.user.get_full_name|default:owner.user.username }}</h2>
-            <span class="text-muted">@{{ owner.user.username }}</span>
-        </div>
-        <a href="{% url 'owner_edit' %}" class="btn btn-secondary">Editar Perfil</a>
-    </div>
-    
-    {% if owner.age is not None %}
-        <p class="text-muted">{{ owner.city|default:"" }}, {{ owner.state|default:"" }} | {{ owner.age }} anos</p>
-    {% endif %}
-
-    {% if owner.bio %}
-        <p class="lead mt-3">{{ owner.bio }}</p>
-    {% else %}
-        <p class="text-muted mt-3">Nenhuma biografia adicionada ainda.</p>
-    {% endif %}
-
-    <hr>
-    
-    <h4>Meu Pet</h4>
-
-    {% for pet in owner.pet_set.all %}
-        <div class="card mb-3">
-            <div class="card-body">
-                <h5 class="card-title">{{ pet.name }}</h5>
-                <p class="card-text">{{ pet.breed }} | {{ pet.age }} anos</p>
-                <a href="{% url 'pet_detail' pk=pet.pk %}" class="btn btn-primary">Ver Perfil do Pet</a>
+<div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8">
+        
+        <div class="glass-card">
+            
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center">
+                    {% if owner.profile_picture %}
+                        <img src="{{ owner.profile_picture.url }}" alt="Foto de {{ owner.user.get_full_name }}" class="rounded-circle me-3" style="width: 80px; height: 80px; object-fit: cover;">
+                    {% endif %}
+                    <div>
+                        <h2 class="mb-0">{{ owner.user.get_full_name|default:owner.user.username }}</h2>
+                        <span class="text-muted">@{{ owner.user.username }}</span>
+                    </div>
+                </div>
+                <a href="{% url 'owner_edit' %}" class="btn btn-outline-light">Editar Perfil</a>
             </div>
-        </div>
-    {% empty %}
-        <p>Você ainda não cadastrou nenhum pet.</p>
-    {% endfor %}
+            
+            {% if owner.age is not None or owner.city %}
+                <p class="text-body">
+                    {% if owner.city %}{{ owner.city }}{% endif %}{% if owner.city and owner.state %}, {% endif %}{% if owner.state %}{{ owner.state }}{% endif %}
+                    {% if owner.age is not None %} | {{ owner.age }} anos{% endif %}
+                </p>
+            {% endif %}
 
+            {% if owner.bio %}
+                <p class="mt-3">{{ owner.bio }}</p>
+            {% else %}
+                <p class="text-muted mt-3">Nenhuma biografia adicionada ainda.</p>
+            {% endif %}
+
+            <hr class="my-4">
+            
+            <h4 class="mb-3">Meu Pet</h4>
+
+            {% for pet in owner.pet_set.all %}
+                <div class="card bg-light bg-opacity-25 mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="card-title mb-1">{{ pet.name }}</h5>
+                                <p class="card-text text-muted">{{ pet.breed }} | {{ pet.age }} anos</p>
+                            </div>
+                            <a href="{% url 'pet_detail' pk=pet.pk %}" class="btn btn-light">Ver Perfil</a>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p>Você ainda não cadastrou nenhum pet.</p>
+            {% endfor %}
+
+        </div></div>
 </div>
 {% endblock %}

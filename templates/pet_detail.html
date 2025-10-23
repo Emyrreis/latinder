@@ -2,42 +2,42 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-md-8">
-            <div class="d-flex align-items-center mb-3">
-                <h2 class="me-3">{{ pet.name }}</h2>
-                <a href="{% url 'pet_edit' pk=pet.pk %}" class="btn btn-sm btn-secondary">Editar Pet</a>
+<div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8">
+
+        <div class="glass-card">
+            
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center">
+                    <h2 class="me-3 mb-0">{{ pet.name }}</h2>
+                    <a href="{% url 'pet_edit' pk=pet.pk %}" class="btn btn-sm btn-outline-light">Editar Perfil</a>
+                </div>
             </div>
-            <p class="text-muted">{{ pet.breed }} | {{ pet.age }} anos</p>
+            <p class="text-body-secondary">{{ pet.breed }} | {{ pet.age }} anos</p>
             <p>{{ pet.bio }}</p>
-        </div>
-    </div>
 
-    <hr>
+            <hr class="my-4">
 
-    <h4>Fotos</h4>
-    <div class="row">
-        {% for photo in pet.petphoto_set.all %}
-            <div class="col-md-4 mb-3">
-                <img src="{{ photo.image.url }}" class="img-fluid rounded" alt="Foto de {{ pet.name }}">
+            <h4 class="mb-3">Fotos</h4>
+            <div class="row">
+                {% for photo in pet.petphoto_set.all %}
+                    <div class="col-md-4 mb-3">
+                        <img src="{{ photo.image.url }}" class="img-fluid rounded shadow-sm" alt="Foto de {{ pet.name }}">
+                    </div>
+                {% empty %}
+                    <p class="text-muted">Este pet ainda não tem fotos cadastradas.</p>
+                {% endfor %}
             </div>
-        {% empty %}
-            <p>Este pet ainda não tem fotos cadastradas.</p>
-        {% endfor %}
-    </div>
 
-    <hr>
+            <hr class="my-4">
 
-    <div class="row mt-3">
-        <div class="col-md-6">
-            <h4>Adicionar Nova Foto</h4>
+            <h4 class="mb-3">Adicionar Nova Foto</h4>
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ photo_form|crispy }}
                 <button type="submit" class="btn btn-primary mt-2">Enviar Foto</button>
             </form>
-        </div>
-    </div>
+
+        </div></div>
 </div>
 {% endblock %}

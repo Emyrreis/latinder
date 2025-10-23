@@ -1,31 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="text-center">
-        <h1 class="mt-5">Bem-vindo ao Latinder, {{ user.username }}!</h1>
+<div class="row justify-content-center align-items-center" style="min-height: 70vh;">
+    <div class="col-md-8 col-lg-6">
 
-        {% comment %}
-        Estágio 1: O perfil do dono está incompleto? (Verificamos a data de nascimento)
-        {% endcomment %}
-        {% if not user.owner.birth_date %}
-            <p class="lead mt-4">Para começar, precisamos de mais algumas informações sobre você.</p>
-            <a href="{% url 'owner_edit' %}" class="btn btn-primary btn-lg">Finalizar Meu Cadastro</a>
+        <div class="glass-card text-center">
+            
+            <h1 class="mb-4">Bem-vindo, {{ user.username }}!</h1>
 
-        {% comment %}
-        Estágio 2: O perfil está completo, mas não tem pet?
-        {% endcomment %}
-        {% elif not user.owner.pet_set.all %}
-            <p class="lead mt-4">Seu perfil está pronto! Agora, vamos cadastrar seu pet.</p>
-            <a href="{% url 'pet_add' %}" class="btn btn-success btn-lg">Adicionar Meu Pet</a>
+            {% comment %}
+            Estágio 1: O perfil do dono está incompleto? (Verificamos a data de nascimento como um indicador)
+            {% endcomment %}
+            {% if not user.owner.birth_date %}
+                <p class="lead">Para começar, precisamos de mais algumas informações sobre você.</p>
+                <a href="{% url 'owner_edit' %}" class="btn btn-primary btn-lg mt-3">Finalizar Meu Cadastro</a>
 
-        {% comment %}
-        Estágio 3: Perfil e pet completos.
-        {% endcomment %}
-        {% else %}
-            <p class="lead mt-4">
-                Tudo pronto para encontrar um parceiro para o seu pet, <strong>{{ user.owner.pet_set.first.name }}</strong>!
-            </p>
-            {% endif %}
+            {% comment %}
+            Estágio 2: O perfil está completo, mas não tem pet?
+            {% endcomment %}
+            {% elif not user.owner.pet_set.all %}
+                <p class="lead">Seu perfil está pronto! Agora, vamos cadastrar seu pet.</p>
+                <a href="{% url 'pet_add' %}" class="btn btn-success btn-lg mt-3">Adicionar Meu Pet</a>
 
-    </div>
+            {% comment %}
+            Estágio 3: Perfil e pet completos.
+            {% endcomment %}
+            {% else %}
+                <p class="lead">
+                    Tudo pronto para encontrar um parceiro para o seu pet, <strong>{{ user.owner.pet_set.first.name }}</strong>!
+                </p>
+                {% endif %}
+
+        </div></div>
+</div>
 {% endblock %}
