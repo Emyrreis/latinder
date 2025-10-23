@@ -1,4 +1,5 @@
 from django.urls import reverse_lazy
+# A correção está nesta linha, removemos o ", Or"
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.base import TemplateView
 from django.contrib.auth.forms import UserCreationForm
@@ -6,8 +7,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView
 from django.http import HttpResponseRedirect
 
-# A correção está aqui: adicionamos OwnerEditForm
-from .forms import PetForm, PetPhotoForm, OwnerEditForm
+# Importações dos nossos Forms e Models
+from .forms import PetForm, PetPhotoForm, OwnerProfileForm
 from .models import Pet, Owner, PetPhoto
 
 # --- Nossas Views ---
@@ -65,7 +66,7 @@ class OwnerDetailView(LoginRequiredMixin, DetailView):
 
 class OwnerUpdateView(LoginRequiredMixin, UpdateView):
     model = Owner
-    form_class = OwnerEditForm
+    form_class = OwnerProfileForm
     template_name = 'owner_form.html'
     
     def get_success_url(self):
@@ -73,3 +74,20 @@ class OwnerUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user.owner
+    
+
+# No final de accounts/views.py
+
+class PetUpdateView(LoginRequiredMixin, UpdateView):
+    model = Pet
+    form_class = PetForm # Podemos reutilizar o mesmo PetForm que criamos!
+    template_name = 'pet_form.html' # E também o mesmo template!
+
+    def get_success_url(self):
+        # Após editar, volta para a página de detalhes do pet
+        return reverse_lazy('pet_detail', kwargs={'pk': self.object.pk})
+
+    def get_queryset(self):
+        # Esta é a checagem de segurança!
+        # A view só poderá encontrar e editar pets que pertencem ao usuário logado.
+        return Pet.objects.filter(owner=self.request.user.owner)

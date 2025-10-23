@@ -5,8 +5,9 @@ from datetime import date
 
 class Owner(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    # ADICIONEI ESTE CAMPO
+    profile_picture = models.ImageField(upload_to='owner_pictures/', blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
-    # Novos campos (blank=True e null=True para permitir que sejam vazios)
     birth_date = models.DateField(blank=True, null=True)
     state = models.CharField(max_length=100, blank=True, null=True)
     city = models.CharField(max_length=100, blank=True, null=True)

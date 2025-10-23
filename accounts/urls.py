@@ -1,8 +1,10 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 # 1. Adicione PetDetailView à importação
-from .views import SignUpView, HomeView, PetCreateView, PetDetailView, OwnerDetailView
-from .views import SignUpView, HomeView, PetCreateView, PetDetailView, OwnerDetailView, OwnerUpdateView
+from .views import (
+    SignUpView, HomeView, PetCreateView, PetDetailView, OwnerDetailView,
+    OwnerUpdateView, PetUpdateView
+)
 
 urlpatterns = [
     # Rotas de Autenticação
@@ -24,4 +26,6 @@ urlpatterns = [
     path('profile/<int:pk>/', OwnerDetailView.as_view(), name='owner_detail'),
 
     path('profile/edit/', OwnerUpdateView.as_view(), name='owner_edit'),
+
+    path('pet/<int:pk>/edit/', PetUpdateView.as_view(), name='pet_edit'),
 ]
