@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
 
 {% block content %}
 <div class="row justify-content-center">
@@ -9,6 +8,7 @@
             
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <div class="d-flex align-items-center">
+                    
                     {% if owner.profile_picture %}
                         <img src="{{ owner.profile_picture.url }}" alt="Foto de {{ owner.user.get_full_name }}" class="rounded-circle me-3" style="width: 80px; height: 80px; object-fit: cover;">
                     {% endif %}
@@ -17,7 +17,7 @@
                         <span class="text-muted">@{{ owner.user.username }}</span>
                     </div>
                 </div>
-                <a href="{% url 'owner_edit' %}" class="btn btn-outline-light">Editar Perfil</a>
+                <a href="{% url 'owner_edit' %}" class="btn btn-primary">Editar Perfil</a>
             </div>
             
             {% if owner.age is not None or owner.city %}
@@ -45,7 +45,7 @@
                                 <h5 class="card-title mb-1">{{ pet.name }}</h5>
                                 <p class="card-text text-muted">{{ pet.breed }} | {{ pet.age }} anos</p>
                             </div>
-                            <a href="{% url 'pet_detail' pk=pet.pk %}" class="btn btn-light">Ver Perfil</a>
+                            <a href="{% url 'pet_detail' pk=pet.pk %}" class="btn btn-primary">Ver Perfil</a>
                         </div>
                     </div>
                 </div>

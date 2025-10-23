@@ -4,14 +4,17 @@
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-8 col-lg-6">
-        <h2 class="mt-4 mb-3">Editar Meu Perfil</h2>
-        <form method="post">
-            {% csrf_token %}
-            {{ form|crispy }}
-            <div class="d-grid">
-                <button type="submit" class="btn btn-primary mt-3">Salvar Alterações</button>
-            </div>
-        </form>
+        <div class="glass-card">
+            <h2 class="mt-4 mb-3 text-center">Editar Meu Perfil</h2>
+            
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary mt-3">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}
