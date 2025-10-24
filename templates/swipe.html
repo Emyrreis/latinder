@@ -34,6 +34,14 @@
                             </div>
                         </div>
                     {% endfor %}
+
+                    <div class="swiper-slide">
+                        <div class="text-center p-5 glass-card d-flex flex-column justify-content-center align-items-center" style="height: 100%;">
+                            <h4>Fim da Fila!</h4>
+                            <p class="lead">Você já viu todos os pets disponíveis por enquanto. Volte mais tarde para ver novos perfis!</p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         {% else %}
@@ -74,28 +82,24 @@
                 .catch(error => console.error('Erro na requisição fetch:', error));
             }
 
-            // ===============================================================
-            // INÍCIO DA CORREÇÃO FINAL DOS BUGS
-            // ===============================================================
-
             // Função central para lidar com a ação de swipe
             function handleSwipe(liked) {
-                // O slide que acabou de ser deslizado é sempre o que estava ativo antes da transição.
-                // Usamos 'swiper.previousIndex' para obter seu índice.
                 const swipedSlideIndex = swiper.previousIndex;
                 const swipedSlide = swiper.slides[swipedSlideIndex];
 
                 if (!swipedSlide) return; // Segurança extra
 
                 const swipedPetId = swipedSlide.dataset.petId;
+                
+                // Só envia a ação para o Django se o card for de um pet
+                if (swipedPetId) {
+                    sendSwipeAction(swipedPetId, liked);
+                }
 
-                // 1. Envia a ação para o Django
-                sendSwipeAction(swipedPetId, liked);
-
-                // 2. Remove o slide da pilha
+                // Remove o slide da pilha
                 swiper.removeSlide(swipedSlideIndex);
 
-                // 3. Atualiza o swiper para ele se reorganizar
+                // Atualiza o swiper para ele se reorganizar
                 swiper.update();
             }
 
@@ -108,10 +112,6 @@
             swiper.on('slidePrevTransitionEnd', function() {
                 handleSwipe(true); // true = 'like'
             });
-
-            // ===============================================================
-            // FIM DA CORREÇÃO FINAL DOS BUGS
-            // ===============================================================
         });
     </script>
 {% endblock %}
