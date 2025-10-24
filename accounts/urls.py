@@ -1,5 +1,14 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
+# ... (outras importações)
+# 1. Adicione SwipeView à importação
+from .views import (
+    SignUpView, HomeView, PetCreateView, PetDetailView, OwnerDetailView,
+    OwnerUpdateView, PetUpdateView, SwipeView, ProcessSwipeView
+)
+
+
+
 # 1. Adicione PetDetailView à importação
 from .views import (
     SignUpView, HomeView, PetCreateView, PetDetailView, OwnerDetailView,
@@ -28,4 +37,8 @@ urlpatterns = [
     path('profile/edit/', OwnerUpdateView.as_view(), name='owner_edit'),
 
     path('pet/<int:pk>/edit/', PetUpdateView.as_view(), name='pet_edit'),
+
+    path('swipe/', SwipeView.as_view(), name='swipe'),
+    
+    path('api/swipe/', ProcessSwipeView.as_view(), name='process_swipe'),
 ]

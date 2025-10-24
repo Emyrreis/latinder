@@ -26,9 +26,13 @@
             Estágio 3: Perfil e pet completos.
             {% endcomment %}
             {% else %}
+                
                 <p class="lead">
                     Tudo pronto para encontrar um parceiro para o seu pet, <strong>{{ user.owner.pet_set.first.name }}</strong>!
                 </p>
+                
+                <a href="{% url 'swipe' %}" class="btn btn-primary btn-lg mt-3">Começar a Deslizar</a>
+
                 {% endif %}
 
         </div></div>

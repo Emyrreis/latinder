@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% comment %}
+Este bloco injeta o CSS da biblioteca Swiper.js no <head> do nosso base.html.
+{% endcomment %}
+{% block extra_css %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <style>
+        /* Garante que o container do Swiper tenha um tamanho mínimo para aparecer */
+        .swiper {
+            width: 100%;
+            height: 520px; /* Altura aproximada do card com a foto */
+        }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+
+        {% csrf_token %}
+
+        {% if pets_to_swipe %}
+            <div class="swiper my-4">
+                <div class="swiper-wrapper">
+                    
+                    {% for pet in pets_to_swipe %}
+                        <div class="swiper-slide" data-pet-id="{{ pet.id }}">
+                            <div class="card shadow-lg">
+                                {% with pet.petphoto_set.first as first_photo %}
+                                    {% if first_photo %}
+                                        <img src="{{ first_photo.image.url }}" class="card-img-top" alt="Foto de {{ pet.name }}" style="height: 400px; object-fit: cover;">
+                                    {% else %}
+                                        <div class="d-flex justify-content-center align-items-center bg-secondary text-white" style="height: 400px;">
+                                            <span>Sem foto</span>
+                                        </div>
+                                    {% endif %}
+                                {% endwith %}
+                                <div class="card-body">
+                                    <h4 class="card-title">{{ pet.name }}, {{ pet.age }}</h4>
+                                    <p class="card-text text-muted">{{ pet.breed }}</p>
+                                    <p class="card-text">{{ pet.bio }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <div class="text-center p-5 glass-card">
+                <h4>Parabéns!</h4>
+                <p class="lead">Você já viu todos os pets disponíveis. Volte mais tarde para ver novos perfis!</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+
+{% comment %}
+Este bloco injeta o JavaScript do Swiper.js e nosso código personalizado.
+{% endcomment %}
+{% block extra_js %}
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Pega o token CSRF que adicionamos no HTML
+            const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]')?.value;
+
+            const swiper = new Swiper('.swiper', {
+                effect: 'cards',
+                grabCursor: true,
+                
+                // A linha 'allowSlidePrev: false' foi REMOVIDA para corrigir o bug
+                // que impedia o deslize para a direita.
+                
+                resistanceRatio: 0.85,
+            });
+
+            // Função que envia a ação de swipe para o servidor Django via AJAX
+            function sendSwipeAction(petId, liked) {
+                fetch('/api/swipe/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({
+                        'swiped_pet_id': petId,
+                        'liked': liked
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        console.error('Erro do servidor:', response.status);
+                        return;
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data) {
+                        console.log('Resposta do Django:', data);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Erro na requisição fetch:', error);
+                });
+            }
+
+            // Escuta o evento que é disparado quando um slide sai da tela
+            swiper.on('slideChangeTransitionEnd', function () {
+                if (swiper.previousIndex === undefined) return;
+
+                const previousSlide = swiper.slides[swiper.previousIndex];
+                const swipedPetId = previousSlide.dataset.petId;
+                const liked = swiper.translate > 0; // Direita (like) se positivo, Esquerda (pass) se negativo
+
+                // Chama nossa função para enviar os dados ao Django
+                sendSwipeAction(swipedPetId, liked);
+            });
+        });
+    </script>
+{% endblock %}

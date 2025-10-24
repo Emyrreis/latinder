@@ -51,3 +51,24 @@ class PetPhoto(models.Model):
 
     def __str__(self):
         return f"Photo for {self.pet.name}"
+    
+    #------------------------------------------------------------------------- Sprint 2 a partir daqui --------------------------------------------------#
+
+    # No final de accounts/models.py
+
+# ... (modelos Owner, Pet, PetPhoto existentes) ...
+
+# ADICIONE ESTE NOVO MODELO
+class Swipe(models.Model):
+    # O pet que está fazendo a ação de deslizar
+    swiper = models.ForeignKey(Pet, on_delete=models.CASCADE, related_name='swipes_made')
+    # O pet que está sendo avaliado
+    swiped = models.ForeignKey(Pet, on_delete=models.CASCADE, related_name='swipes_received')
+    # True se foi um 'like', False se foi um 'pass'
+    liked = models.BooleanField()
+    # Data e hora em que a ação ocorreu, preenchido automaticamente
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        action = "Liked" if self.liked else "Passed"
+        return f"{self.swiper.name} {action} {self.swiped.name}"

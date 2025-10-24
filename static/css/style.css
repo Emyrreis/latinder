@@ -67,3 +67,10 @@ body.login-page::before {
     background-color: #7B3A99;
     border-color: #7B3A99;
 }
+
+
+/* Garante que o container do Swiper tenha um tamanho mínimo */
+.swiper {
+    width: 100%;
+    height: 500px; /* Altura aproximada do card */
+}

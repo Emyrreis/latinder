@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-"""Django's command-line utility for administrative tasks."""
+# Aqui  funciona como o ponto de entrada para várias tarefas administrativas do Django. Como se fosse o "cérebro" que coordena tudo.
 import os
 import sys
 
