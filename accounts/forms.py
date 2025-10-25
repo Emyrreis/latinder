@@ -1,3 +1,5 @@
+#Esses formulários lidam com a criação e edição de Pets, upload de fotos de Pets e edição do perfil completo do Dono (Owner),
+#  incluindo campos do modelo User associado.
 from django import forms
 from django.contrib.auth.models import User
 from .models import Owner, Pet, PetPhoto

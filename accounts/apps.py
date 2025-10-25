@@ -1,3 +1,4 @@
+# Esses são arquivos padrão do Django para configuração do aplicativo "accounts".
 from django.apps import AppConfig
 
 

@@ -1,4 +1,4 @@
-
+# Esses são as configurações principais do projeto Latinder.
 from pathlib import Path
 import os
 
@@ -13,9 +13,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
-# Application definition
-
+# Definiçãos do aplicativos instalados
+# Inclui o app "accounts" e pacotes para formulários bonitos
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -28,6 +27,10 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
 ]
 
+# Middleware padrão do Django
+# O que é middleware? São "camadas" que processam requisições e respostas.
+# Elas podem adicionar funcionalidades como segurança, sessões, etc.
+# Cada middleware é executado em ordem.
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -40,6 +43,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'latinder_proj.urls'
 
+# Configuração dos templates HTML
+# Define onde o Django deve procurar pelos arquivos de template
+# Inclui diretórios globais e dos apps instalados
+# Configurações detalhadas dos templates
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -59,9 +66,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'latinder_proj.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
+#Banco de dados
+# Usando SQLite para desenvolvimento local
+# Em produção, considerar usar PostgreSQL ou outro banco robusto
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -69,10 +76,9 @@ DATABASES = {
     }
 }
 
-
-# Password validation
-# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
-
+# Validação de senhas
+# Define regras para senhas seguras
+# Inclui validadores padrão do Django
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -89,9 +95,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/4.2/topics/i18n/
-
+# Configurações internacionais
+# Define idioma e fuso horário
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -100,18 +105,16 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
-
+# Configurações de arquivos estáticos (CSS, JavaScript, Imagens)
+# Define onde os arquivos estáticos são armazenados e servidos
 STATIC_URL = 'static/'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
-
+# Configuração padrão para o campo auto incrementado do Django
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Configurações do Crispy Forms
+# O que é Crispy Forms? É uma biblioteca que facilita a criação de formulários bonitos e responsivos.
+# Aqui estamos configurando para usar o template pack do Bootstrap 5
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
@@ -127,7 +130,3 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-
-# No final de latinder_proj/settings.py
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

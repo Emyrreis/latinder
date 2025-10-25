@@ -1,12 +1,6 @@
-"""
-WSGI config for latinder_proj project.
-
-It exposes the WSGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/4.2/howto/deployment/wsgi/
-"""
-
+# Esse arquivo configura o WSGI para o projeto Latinder.
+# WSGI (Web Server Gateway Interface) é uma especificação para servidores web e aplicações Python
+# que permite comunicação síncrona
 import os
 
 from django.core.wsgi import get_wsgi_application
