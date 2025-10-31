@@ -19,6 +19,7 @@ from .models import Pet, Owner, PetPhoto, Swipe
 from .forms import PetForm, PetPhotoForm, OwnerProfileForm
 from .models import Pet, Owner, PetPhoto
 from .models import Pet, Owner, PetPhoto, Swipe, Match
+from django.db import models
 # --- Nossas Views ---
 # View para cadastro de novos usuários
 class SignUpView(CreateView):
@@ -184,3 +185,39 @@ class ProcessSwipeView(LoginRequiredMixin, View):
 
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+        
+class MatchesView(LoginRequiredMixin, TemplateView):
+    """View para exibir a lista de matches do usuário"""
+    template_name = 'matches.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Pega o pet do usuário logado
+        try:
+            user_pet = self.request.user.owner.pet_set.first()
+        except (Owner.DoesNotExist, AttributeError):
+            context['matches'] = []
+            return context
+        
+        if not user_pet:
+            context['matches'] = []
+            return context
+        
+        # Busca todos os matches do pet do usuário
+        matches = Match.objects.filter(
+            models.Q(pet1=user_pet) | models.Q(pet2=user_pet)
+        ).select_related('pet1', 'pet2', 'pet1__owner__user', 'pet2__owner__user')
+        
+        # Cria lista com informações dos pets combinados
+        matched_pets = []
+        for match in matches:
+            # Pega o outro pet do match
+            other_pet = match.pet2 if match.pet1 == user_pet else match.pet1
+            matched_pets.append({
+                'pet': other_pet,
+                'match_date': match.created_at
+            })
+        
+        context['matches'] = matched_pets
+        return context
