@@ -79,3 +79,16 @@ class Swipe(models.Model):
     def __str__(self):
         action = "Liked" if self.liked else "Passed"
         return f"{self.swiper.name} {action} {self.swiped.name}"
+
+# Modelo Match registra quando dois pets deram like mútuo
+class Match(models.Model):
+    pet1 = models.ForeignKey(Pet, on_delete=models.CASCADE, related_name='matches_as_pet1')
+    pet2 = models.ForeignKey(Pet, on_delete=models.CASCADE, related_name='matches_as_pet2')
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        # Garante que não haja matches duplicados
+        unique_together = ['pet1', 'pet2']
+    
+    def __str__(self):
+        return f"Match entre {self.pet1.name} e {self.pet2.name}"
