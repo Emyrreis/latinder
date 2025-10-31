@@ -185,7 +185,7 @@
             const endMessage = document.getElementById('endMessage');
             let cards = Array.from(document.querySelectorAll('.pet-card'));
             
-            // Função para enviar ação ao backend
+            // Envia a ação de like/pass para o backend Django
             function sendSwipeAction(petId, liked) {
                 fetch('/api/swipe/', {
                     method: 'POST',
@@ -197,9 +197,16 @@
                         'swiped_pet_id': petId, 
                         'liked': liked 
                     })
-                })
+                 })
                 .then(response => response.ok ? response.json() : Promise.reject(response.status))
-                .then(data => console.log('Swipe registrado:', liked ? 'Match' : 'Pass'))
+                .then(data => {
+                    console.log('Swipe registrado:', liked ? 'Match' : 'Pass');
+        
+                    // Verifica se houve match
+                    if (data.match) {
+                        alert('Você tem um novo match! 💕');
+                    }
+                })
                 .catch(error => console.error('Erro:', error));
             }
             
