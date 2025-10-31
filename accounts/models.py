@@ -92,3 +92,23 @@ class Match(models.Model):
     
     def __str__(self):
         return f"Match entre {self.pet1.name} e {self.pet2.name}"
+    
+# Modelo Message registra as mensagens trocadas entre donos de pets que deram match
+class Message(models.Model):
+    # O match ao qual esta mensagem pertence
+    match = models.ForeignKey(Match, on_delete=models.CASCADE, related_name='messages')
+    # O dono que enviou a mensagem
+    sender = models.ForeignKey(Owner, on_delete=models.CASCADE, related_name='messages_sent')
+    # Conteúdo da mensagem
+    content = models.TextField()
+    # Data e hora do envio (preenchido automaticamente)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    # Indica se a mensagem foi lida pelo destinatário
+    is_read = models.BooleanField(default=False)
+    
+    class Meta:
+        # Ordena mensagens por ordem cronológica (mais antigas primeiro)
+        ordering = ['timestamp']
+    
+    def __str__(self):
+        return f"{self.sender.user.username}: {self.content[:50]}"
