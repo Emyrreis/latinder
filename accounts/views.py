@@ -18,6 +18,7 @@ from .models import Pet, Owner, PetPhoto, Swipe
 # Importações dos nossos Forms e Models
 from .forms import PetForm, PetPhotoForm, OwnerProfileForm
 from .models import Pet, Owner, PetPhoto
+from .models import Pet, Owner, PetPhoto, Swipe, Match
 # --- Nossas Views ---
 # View para cadastro de novos usuários
 class SignUpView(CreateView):
@@ -133,7 +134,7 @@ class SwipeView(LoginRequiredMixin, ListView):
 # Ela responde com um JSON indicando sucesso ou falha
 # Essa view é chamada pelo JavaScript na página de swipe
 class ProcessSwipeView(LoginRequiredMixin, View):
-    # Processa o POST enviado pelo JavaScript com os dados do swipe
+    """View para processar swipes e detectar matches"""
     def post(self, request, *args, **kwargs):
         try:
             # Pega o pet do usuário logado
@@ -156,9 +157,30 @@ class ProcessSwipeView(LoginRequiredMixin, View):
                 liked=liked
             )
             
-            # Responde ao JavaScript com uma mensagem de sucesso
-            return JsonResponse({'status': 'success'})
+            # Verifica se houve match (apenas se foi um like)
+            match_occurred = False
+            if liked:
+                # Verifica se o outro pet também deu like
+                reciprocal_like = Swipe.objects.filter(
+                    swiper=swiped_pet,
+                    swiped=swiper_pet,
+                    liked=True
+                ).exists()
+                
+                if reciprocal_like:
+                    # Cria o match (garante ordem consistente dos IDs para evitar duplicatas)
+                    pet1, pet2 = sorted([swiper_pet.id, swiped_pet.id])
+                    Match.objects.get_or_create(
+                        pet1_id=pet1,
+                        pet2_id=pet2
+                    )
+                    match_occurred = True
+            
+            # Responde ao JavaScript com informação sobre o match
+            return JsonResponse({
+                'status': 'success',
+                'match': match_occurred
+            })
 
         except Exception as e:
-            # Em caso de qualquer erro, responde com uma mensagem de erro
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
