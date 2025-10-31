@@ -4,7 +4,7 @@ from django.contrib.auth import views as auth_views
 # Importação das nossas Views
 from .views import (
     SignUpView, HomeView, PetCreateView, PetDetailView, OwnerDetailView,
-    OwnerUpdateView, PetUpdateView, SwipeView, ProcessSwipeView
+    OwnerUpdateView, PetUpdateView, SwipeView, ProcessSwipeView, MatchesView
 )
 
 # Definição das rotas URL para o app de contas
@@ -34,4 +34,5 @@ urlpatterns = [
     path('pet/<int:pk>/edit/', PetUpdateView.as_view(), name='pet_edit'),
     path('swipe/', SwipeView.as_view(), name='swipe'),
     path('api/swipe/', ProcessSwipeView.as_view(), name='process_swipe'),
+    path('matches/', MatchesView.as_view(), name='matches'),
 ]
